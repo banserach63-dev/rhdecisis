@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   ArrowRight,
-  ClipboardList,
   Database,
   LineChart,
   BellRing,
@@ -47,11 +46,8 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-surface/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 lg:px-8">
-        <div className="flex items-center gap-2.5 font-semibold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary-hover text-primary-foreground shadow-sm shadow-primary/30">
-            <ClipboardList className="h-4.5 w-4.5" />
-          </span>
-          <span className="text-[15px] tracking-tight">SARH-AD</span>
+        <div className="flex items-center font-semibold">
+          <span className="text-[17px] tracking-tight text-ink">SARH-AD</span>
         </div>
         <nav className="hidden items-center gap-7 text-sm font-medium text-muted md:flex">
           <a href="#apercu" className="hover:text-foreground">Aperçu</a>
@@ -288,8 +284,7 @@ function SiteFooter() {
   return (
     <footer className="bg-ink text-white/50">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-xs sm:flex-row lg:px-8">
-        <div className="flex items-center gap-2">
-          <ClipboardList className="h-4 w-4" />
+        <div className="flex items-center gap-2 font-medium text-white/80">
           <span>SARH-AD — Système Analytique RH d&rsquo;Aide à la Décision</span>
         </div>
         <span>Usage strictement interne · Accès réservé aux collaborateurs autorisés</span>

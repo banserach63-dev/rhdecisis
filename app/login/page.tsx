@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClipboardList, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { LoginForm } from "./login-form";
 import { SetupForm } from "./setup-form";
@@ -24,11 +24,8 @@ export default async function LoginPage() {
         </Link>
 
         <div className="mb-8 flex flex-col items-center text-center">
-          <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-hover text-primary-foreground shadow-md shadow-primary/25">
-            <ClipboardList className="h-6 w-6" />
-          </span>
-          <h1 className="text-lg font-semibold tracking-tight text-ink">SARH-AD</h1>
-          <p className="text-sm text-muted">Système Analytique RH d&rsquo;Aide à la Décision</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-ink">SARH-AD</h1>
+          <p className="mt-1 text-sm text-muted">Système Analytique RH d&rsquo;Aide à la Décision</p>
         </div>
 
         <div className="rounded-xl border border-border bg-surface p-6 shadow-lg shadow-ink/5">
