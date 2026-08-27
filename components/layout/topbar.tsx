@@ -28,7 +28,7 @@ export function Topbar({
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-surface/95 px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-surface/90 px-4 shadow-[0_1px_0_0_rgba(15,30,60,0.03)] backdrop-blur lg:px-6">
       <div className="flex items-center gap-3">
         <button className="text-muted lg:hidden" onClick={onMenu} aria-label="Ouvrir le menu">
           <Menu className="h-5 w-5" />
@@ -52,7 +52,7 @@ export function Topbar({
             onClick={() => setOpen((v) => !v)}
             className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-surface-muted"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-soft text-xs font-semibold text-primary">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-hover text-xs font-semibold text-primary-foreground">
               {profile.prenom.charAt(0)}
               {profile.nom.charAt(0)}
             </span>

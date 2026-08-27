@@ -1,4 +1,5 @@
-import { ClipboardList } from "lucide-react";
+import Link from "next/link";
+import { ClipboardList, ArrowLeft } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { LoginForm } from "./login-form";
 import { SetupForm } from "./setup-form";
@@ -13,17 +14,24 @@ export default async function LoginPage() {
   const needsSetup = !count || count === 0;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm">
+    <div className="bg-grid relative flex min-h-screen items-center justify-center bg-background px-4 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_30%,black,transparent)]">
+      <div className="relative w-full max-w-sm [mask-image:none]">
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-foreground"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> Retour à l&rsquo;accueil
+        </Link>
+
         <div className="mb-8 flex flex-col items-center text-center">
-          <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+          <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-hover text-primary-foreground shadow-md shadow-primary/25">
             <ClipboardList className="h-6 w-6" />
           </span>
-          <h1 className="text-lg font-semibold text-foreground">SARH-AD</h1>
+          <h1 className="text-lg font-semibold tracking-tight text-ink">SARH-AD</h1>
           <p className="text-sm text-muted">Système Analytique RH d&rsquo;Aide à la Décision</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
+        <div className="rounded-xl border border-border bg-surface p-6 shadow-lg shadow-ink/5">
           {needsSetup ? (
             <>
               <h2 className="mb-1 text-sm font-semibold text-foreground">Configuration initiale</h2>
@@ -39,6 +47,9 @@ export default async function LoginPage() {
             </>
           )}
         </div>
+        <p className="mt-6 text-center text-[11px] text-muted">
+          Usage strictement interne — accès réservé aux collaborateurs autorisés.
+        </p>
       </div>
     </div>
   );

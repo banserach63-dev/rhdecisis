@@ -32,14 +32,16 @@ export function StatCard({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+    <div className="group rounded-xl border border-border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted">{label}</span>
-        <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${toneClasses[tone]}`}>
+        <span
+          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-transform group-hover:scale-105 ${toneClasses[tone]}`}
+        >
           <Icon className="h-4.5 w-4.5" />
         </span>
       </div>
-      <div className="mt-3 text-2xl font-semibold text-foreground">{value}</div>
+      <div className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{value}</div>
       {trend && trendLabel && (
         <div className={`mt-1 text-xs font-medium ${trendClasses[trend]}`}>{trendLabel}</div>
       )}
