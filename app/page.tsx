@@ -9,9 +9,18 @@ export default async function RootPage() {
   if (profile) redirect("/dashboard");
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 lg:px-8">
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <Image
+        src="/landing-bg.png"
+        alt=""
+        fill
+        priority
+        className="object-cover object-[68%_50%]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
+
+      <div className="relative flex min-h-screen flex-col px-6 py-6 lg:px-14 lg:py-8">
+        <div className="flex items-center justify-between">
           <span className="text-[17px] font-semibold tracking-tight text-ink">SARH-AD</span>
           <Link
             href="/login"
@@ -20,20 +29,21 @@ export default async function RootPage() {
             Se connecter <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
-      </header>
 
-      <main className="flex flex-1 items-center justify-center px-5 py-8 lg:px-8">
-        <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-2xl border border-border shadow-lg shadow-ink/5">
-          <Image
-            src="/landing-hero.png"
-            alt="SARH-AD — Système Analytique RH d'Aide à la Décision"
-            width={1536}
-            height={1024}
-            priority
-            className="h-auto w-full"
-          />
+        <div className="flex flex-1 items-center">
+          <div className="max-w-xl">
+            <p className="text-sm font-medium tracking-wide text-primary">
+              Système Analytique RH d&rsquo;Aide à la Décision
+            </p>
+            <h1 className="text-balance mt-4 text-4xl font-bold leading-tight tracking-tight text-ink lg:text-5xl">
+              Des données RH fiables pour des décisions efficaces
+            </h1>
+            <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-muted">
+              Centralisez, analysez et transformez vos données en indicateurs pertinents pour piloter la performance.
+            </p>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
