@@ -21,7 +21,9 @@ export default async function RootPage() {
 
       <div className="relative flex min-h-screen flex-col px-6 py-6 lg:px-14 lg:py-8">
         <div className="flex items-center justify-between">
-          <span className="text-[17px] font-semibold tracking-tight text-ink">SARH-AD</span>
+          <span className="text-base font-semibold tracking-tight text-primary">
+            Système Analytique RH d&rsquo;Aide à la Décision SARH-AD
+          </span>
           <Link
             href="/login"
             className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary-hover"
@@ -32,10 +34,7 @@ export default async function RootPage() {
 
         <div className="flex flex-1 items-center">
           <div className="max-w-xl">
-            <p className="text-sm font-medium tracking-wide text-primary">
-              Système Analytique RH d&rsquo;Aide à la Décision
-            </p>
-            <h1 className="text-balance mt-4 text-4xl font-bold leading-tight tracking-tight text-ink lg:text-5xl">
+            <h1 className="text-balance text-4xl font-bold leading-tight tracking-tight text-ink lg:text-5xl">
               Des données RH fiables pour des décisions efficaces
             </h1>
             <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-muted">
