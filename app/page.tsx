@@ -37,7 +37,7 @@ export default async function RootPage() {
             <h1 className="text-balance text-4xl font-bold leading-tight tracking-tight text-ink lg:text-5xl">
               Des données RH fiables pour des décisions efficaces
             </h1>
-            <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-muted">
+            <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-foreground">
               Centralisez, analysez et transformez vos données en indicateurs pertinents pour piloter la performance.
             </p>
           </div>
