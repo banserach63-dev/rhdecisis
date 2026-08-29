@@ -17,7 +17,7 @@ export default async function RootPage() {
         priority
         className="object-cover object-[68%_50%]"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/55 via-white/25 to-transparent" />
 
       <div className="relative flex min-h-screen flex-col px-6 py-6 lg:px-14 lg:py-8">
         <div className="flex items-center justify-between">
