@@ -14,8 +14,8 @@ export default async function LoginPage() {
   const needsSetup = !count || count === 0;
 
   return (
-    <div className="bg-grid relative flex min-h-screen items-center justify-center bg-background px-4 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_30%,black,transparent)]">
-      <div className="relative w-full max-w-sm [mask-image:none]">
+    <div className="relative flex min-h-screen items-center justify-center bg-[#e6e9ef] px-4">
+      <div className="relative w-full max-w-sm">
         <Link
           href="/"
           className="mb-6 inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-foreground"
@@ -28,7 +28,7 @@ export default async function LoginPage() {
           <p className="mt-1 text-sm text-muted">Système Analytique RH d&rsquo;Aide à la Décision</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-6 shadow-lg shadow-ink/5">
+        <div className="rounded-xl border border-border bg-surface p-6 shadow-2xl shadow-ink/15 ring-1 ring-black/[0.03]">
           {needsSetup ? (
             <>
               <h2 className="mb-1 text-sm font-semibold text-foreground">Configuration initiale</h2>

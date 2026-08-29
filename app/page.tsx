@@ -31,17 +31,9 @@ export default async function RootPage() {
         </div>
 
         <div className="flex flex-1 items-center">
-          <div className="max-w-xl">
-            <p className="text-sm font-medium tracking-wide text-primary">
-              Système Analytique RH d&rsquo;Aide à la Décision
-            </p>
-            <h1 className="text-balance mt-4 text-4xl font-bold leading-tight tracking-tight text-ink lg:text-5xl">
-              Des données RH fiables pour des décisions efficaces
-            </h1>
-            <p className="mt-6 max-w-md text-base font-normal leading-relaxed text-muted">
-              Centralisez, analysez et transformez vos données en indicateurs pertinents pour piloter la performance.
-            </p>
-          </div>
+          <h1 className="text-balance max-w-2xl text-2xl font-semibold leading-snug tracking-tight text-primary lg:text-3xl">
+            Système Analytique RH d&rsquo;aide à la Décision SARH-AD
+          </h1>
         </div>
       </div>
     </div>
