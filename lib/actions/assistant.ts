@@ -1,12 +1,14 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/auth";
 import { buildRhContext } from "@/lib/ai/rh-context";
+import { callLlm, PROVIDER_LABELS } from "@/lib/ai/providers";
+import { resolveAiCredentials } from "@/lib/actions/ai-settings";
 
-export type AssistantState = { error?: string } | undefined;
+export type AssistantState =
+  | { error?: string; reply?: string; conversationId?: string }
+  | undefined;
 
 const SYSTEM_PROMPT = `Tu es l'Assistant Analytique RH du système SARH-AD (Système Analytique RH d'Aide à la Décision).
 Tu réponds en français, de façon claire et professionnelle, à des questions de Direction des Ressources Humaines.
@@ -18,7 +20,11 @@ Règles strictes :
 - Termine toujours ta réponse par une courte ligne "Données utilisées : " listant les champs du contexte que tu as utilisés.
 - Sois synthétique : privilégie les chiffres clés, les pourcentages et de courtes explications.`;
 
-export async function sendMessage(conversationId: string | null, _prev: AssistantState, formData: FormData): Promise<AssistantState> {
+export async function sendMessage(
+  conversationId: string | null,
+  _prev: AssistantState,
+  formData: FormData
+): Promise<AssistantState> {
   const profile = await requireRole("admin", "drh", "direction_generale", "responsable_rh");
   const question = String(formData.get("question") || "").trim();
   if (!question) return { error: "Veuillez saisir une question." };
@@ -39,24 +45,20 @@ export async function sendMessage(conversationId: string | null, _prev: Assistan
   await supabase.from("ai_messages").insert({ conversation_id: convId, role: "user", contenu: question });
 
   const context = await buildRhContext(supabase);
+  const { provider, model, apiKey } = await resolveAiCredentials();
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!apiKey) {
+    const fallback = `L'assistant IA n'est pas encore configuré : aucune clé API n'est renseignée pour ${PROVIDER_LABELS[provider]}. Un administrateur peut la configurer dans Administration → Assistant IA.`;
     await supabase.from("ai_messages").insert({
       conversation_id: convId,
       role: "assistant",
-      contenu:
-        "L'assistant IA n'est pas encore configuré (clé ANTHROPIC_API_KEY manquante côté serveur). Voici néanmoins les données disponibles :\n\n```json\n" +
-        JSON.stringify(context, null, 2) +
-        "\n```",
+      contenu: fallback,
       donnees_utilisees: context,
     });
-    revalidatePath("/assistant-ia");
-    return { error: undefined };
+    return { reply: fallback, conversationId: convId ?? undefined };
   }
 
   try {
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
     const { data: history } = await supabase
       .from("ai_messages")
       .select("role, contenu")
@@ -69,34 +71,35 @@ export async function sendMessage(conversationId: string | null, _prev: Assistan
       content: m.contenu,
     }));
 
-    const response = await client.messages.create({
-      model: "claude-sonnet-5",
-      max_tokens: 1200,
+    const text = await callLlm({
+      provider,
+      apiKey,
+      model,
       system: `${SYSTEM_PROMPT}\n\nContexte RH (JSON, données autorisées pour cet utilisateur) :\n${JSON.stringify(context)}`,
       messages,
     });
 
-    const text = response.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
-      .map((b) => b.text)
-      .join("\n");
+    const reply = text || "Je n'ai pas pu générer de réponse.";
 
     await supabase.from("ai_messages").insert({
       conversation_id: convId,
       role: "assistant",
-      contenu: text || "Je n'ai pas pu générer de réponse.",
+      contenu: reply,
       donnees_utilisees: context,
     });
+
+    return { reply, conversationId: convId ?? undefined };
   } catch (e) {
+    const reply = `Une erreur est survenue lors de l'appel à l'API IA (${PROVIDER_LABELS[provider]}) : ${
+      e instanceof Error ? e.message : "erreur inconnue"
+    }.`;
     await supabase.from("ai_messages").insert({
       conversation_id: convId,
       role: "assistant",
-      contenu: `Une erreur est survenue lors de l'appel à l'API IA : ${e instanceof Error ? e.message : "erreur inconnue"}.`,
+      contenu: reply,
     });
+    return { reply, conversationId: convId ?? undefined };
   }
-
-  revalidatePath("/assistant-ia");
-  return undefined;
 }
 
 export async function createConversation() {
@@ -107,6 +110,5 @@ export async function createConversation() {
     .insert({ user_id: profile.id, titre: "Nouvelle conversation" })
     .select("id")
     .single();
-  revalidatePath("/assistant-ia");
   return data?.id ?? null;
 }

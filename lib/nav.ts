@@ -63,6 +63,7 @@ export const NAV: NavGroup[] = [
       { href: "/admin", label: "Administration", icon: "Settings", roles: ["admin"] },
       { href: "/admin/utilisateurs", label: "Utilisateurs", icon: "UserCog", roles: ["admin"] },
       { href: "/admin/roles", label: "Rôles & permissions", icon: "KeyRound", roles: ["admin"] },
+      { href: "/admin/assistant-ia", label: "Assistant IA", icon: "Sparkles", roles: ["admin"] },
     ],
   },
   {

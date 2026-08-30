@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { FloatingAssistant } from "@/components/assistant/floating-assistant";
 import type { NavGroup } from "@/lib/nav";
 import type { Profile } from "@/lib/database.types";
 
@@ -12,11 +13,13 @@ export function AppShell({
   groups,
   profile,
   alertesNonLues,
+  showAssistant,
   children,
 }: {
   groups: NavGroup[];
   profile: Profile;
   alertesNonLues: number;
+  showAssistant: boolean;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -54,6 +57,7 @@ export function AppShell({
         <Topbar profile={profile} alertesNonLues={alertesNonLues} onMenu={() => setOpen(true)} />
         <main className="flex-1 px-4 py-6 lg:px-6">{children}</main>
       </div>
+      {showAssistant && <FloatingAssistant />}
     </div>
   );
 }

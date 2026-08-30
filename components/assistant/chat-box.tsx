@@ -1,24 +1,47 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Sparkles, Send } from "lucide-react";
-import { sendMessage, type AssistantState } from "@/lib/actions/assistant";
+import { sendMessage } from "@/lib/actions/assistant";
 import type { AiMessage } from "@/lib/database.types";
 
+type LocalMessage = Pick<AiMessage, "id" | "role" | "contenu">;
+
 export function ChatBox({ conversationId, messages }: { conversationId: string | null; messages: AiMessage[] }) {
-  const action = sendMessage.bind(null, conversationId);
-  const [state, formAction, pending] = useActionState<AssistantState, FormData>(action, undefined);
+  const [convId, setConvId] = useState(conversationId);
+  const [items, setItems] = useState<LocalMessage[]>(messages);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+  }, [items.length]);
+
+  function submit(formData: FormData) {
+    const question = String(formData.get("question") || "").trim();
+    if (!question || pending) return;
+
+    setItems((prev) => [...prev, { id: `local-${Date.now()}`, role: "user", contenu: question }]);
+    setError(null);
+    formRef.current?.reset();
+
+    startTransition(async () => {
+      const res = await sendMessage(convId, undefined, formData);
+      if (res?.conversationId) setConvId(res.conversationId);
+      if (res?.error) {
+        setError(res.error);
+      } else if (res?.reply) {
+        setItems((prev) => [...prev, { id: `assistant-${Date.now()}`, role: "assistant", contenu: res.reply! }]);
+      }
+    });
+  }
 
   return (
     <div className="flex h-[calc(100vh-11rem)] flex-col rounded-xl border border-border bg-surface shadow-sm">
       <div className="flex-1 space-y-4 overflow-y-auto p-5">
-        {messages.length === 0 && (
+        {items.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center text-muted">
             <Sparkles className="mb-3 h-8 w-8 text-primary" />
             <p className="text-sm font-medium text-foreground">Posez une question sur vos données RH</p>
@@ -28,7 +51,7 @@ export function ChatBox({ conversationId, messages }: { conversationId: string |
             </p>
           </div>
         )}
-        {messages.map((m) => (
+        {items.map((m) => (
           <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm ${
@@ -46,15 +69,8 @@ export function ChatBox({ conversationId, messages }: { conversationId: string |
         )}
         <div ref={bottomRef} />
       </div>
-      {state?.error && <p className="px-5 pb-2 text-xs text-danger">{state.error}</p>}
-      <form
-        ref={formRef}
-        action={(fd) => {
-          formAction(fd);
-          formRef.current?.reset();
-        }}
-        className="flex items-center gap-2 border-t border-border p-3"
-      >
+      {error && <p className="px-5 pb-2 text-xs text-danger">{error}</p>}
+      <form ref={formRef} action={submit} className="flex items-center gap-2 border-t border-border p-3">
         <input
           name="question"
           required

@@ -466,6 +466,17 @@ export interface AiMessage {
   created_at: string;
 }
 
+export type AiProvider = "anthropic" | "openai" | "deepseek";
+
+export interface AiSettings {
+  id: number;
+  provider: AiProvider;
+  model: string | null;
+  api_key: string | null;
+  updated_by: string | null;
+  updated_at: string;
+}
+
 // Note: these domain types are applied manually at each Supabase call site
 // (e.g. `data as Agent[]`) rather than fed as the client's generic Database
 // parameter — see lib/supabase/server.ts for why.

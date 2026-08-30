@@ -12,8 +12,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .select("id", { count: "exact", head: true })
     .in("statut", ["nouvelle"]);
 
+  const showAssistant = ["admin", "drh", "direction_generale", "responsable_rh"].includes(profile.role);
+
   return (
-    <AppShell groups={navForRole(profile.role)} profile={profile} alertesNonLues={count ?? 0}>
+    <AppShell
+      groups={navForRole(profile.role)}
+      profile={profile}
+      alertesNonLues={count ?? 0}
+      showAssistant={showAssistant}
+    >
       {children}
     </AppShell>
   );

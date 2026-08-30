@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserCog, KeyRound, Building2, ShieldAlert, ScrollText } from "lucide-react";
+import { UserCog, KeyRound, Building2, ShieldAlert, ScrollText, Sparkles } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/ui/page-header";
@@ -20,6 +20,7 @@ export default async function AdminPage() {
     { href: "/admin/roles", title: "Rôles & permissions", desc: "Matrice des droits par rôle", icon: KeyRound },
     { href: "/directions", title: "Référentiels", desc: "Directions, services, grades, catégories, statuts", icon: Building2 },
     { href: "/alertes", title: "Règles d'alerte", desc: "Seuils et niveaux d'alerte", icon: ShieldAlert },
+    { href: "/admin/assistant-ia", title: "Assistant IA", desc: "Fournisseur IA (Claude, OpenAI, DeepSeek) et clé API", icon: Sparkles },
   ];
 
   return (
