@@ -32,9 +32,9 @@ export function Sidebar({
       )}
       <aside
         suppressHydrationWarning
-        className={`fixed top-0 left-0 z-40 flex h-screen w-56 flex-col border-r border-sidebar-border bg-sidebar-bg shadow-[4px_0_24px_-8px_rgba(6,13,28,0.35)] transition-[width,transform] duration-200 ease-in-out lg:sticky lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-sidebar-border bg-sidebar-bg shadow-[4px_0_24px_-8px_rgba(6,13,28,0.35)] transition-[width,transform] duration-200 ease-in-out lg:sticky lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
-        } ${collapsed ? "lg:w-[76px]" : "lg:w-56"}`}
+        } ${collapsed ? "lg:w-[76px]" : "lg:w-64"}`}
       >
         <button
           onClick={onToggleCollapse}
