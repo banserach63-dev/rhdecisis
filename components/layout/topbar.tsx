@@ -28,19 +28,19 @@ export function Topbar({
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-12 items-center justify-between bg-primary px-4 shadow-sm lg:px-6">
+    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-surface/90 px-4 shadow-[0_1px_0_0_rgba(15,30,60,0.03)] backdrop-blur lg:px-6">
       <div className="flex items-center gap-3">
-        <button className="text-white/80 hover:text-white lg:hidden" onClick={onMenu} aria-label="Ouvrir le menu">
+        <button className="text-muted lg:hidden" onClick={onMenu} aria-label="Ouvrir le menu">
           <Menu className="h-5 w-5" />
         </button>
       </div>
       <div className="flex items-center gap-2">
         <Link
           href="/alertes"
-          className="relative flex h-8 w-8 items-center justify-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
+          className="relative flex h-9 w-9 items-center justify-center rounded-lg text-muted hover:bg-surface-muted"
           aria-label="Alertes"
         >
-          <BellRing className="h-4 w-4" />
+          <BellRing className="h-4.5 w-4.5" />
           {alertesNonLues > 0 && (
             <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-semibold text-white">
               {alertesNonLues > 99 ? "99+" : alertesNonLues}
@@ -50,19 +50,19 @@ export function Topbar({
         <div className="relative">
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white/10"
+            className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-surface-muted"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs font-semibold text-white ring-1 ring-white/20">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-hover text-xs font-semibold text-primary-foreground">
               {profile.prenom.charAt(0)}
               {profile.nom.charAt(0)}
             </span>
             <span className="hidden text-left sm:block">
-              <div className="text-xs font-medium text-white">
+              <div className="text-xs font-medium text-foreground">
                 {profile.prenom} {profile.nom}
               </div>
-              <div className="text-[11px] text-white/60">{ROLE_LABELS[profile.role]}</div>
+              <div className="text-[11px] text-muted">{ROLE_LABELS[profile.role]}</div>
             </span>
-            <ChevronDown className="h-3.5 w-3.5 text-white/60" />
+            <ChevronDown className="h-3.5 w-3.5 text-muted" />
           </button>
           {open && (
             <>
