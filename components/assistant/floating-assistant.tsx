@@ -9,9 +9,9 @@ type LocalMessage = { id: string; role: "user" | "assistant"; contenu: string };
 
 const SUGGESTIONS = [
   "Résume-moi la situation des effectifs",
-  "Quel est le taux d'absentéisme ce mois-ci ?",
+  "Quels services ont le plus fort taux d'absentéisme ?",
   "Combien d'alertes critiques sont actives ?",
-  "Quels services ont le plus fort turnover ?",
+  "Quel est le turnover de l'année ?",
 ];
 
 export function FloatingAssistant() {

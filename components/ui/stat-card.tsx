@@ -32,7 +32,7 @@ export function StatCard({
   };
 
   return (
-    <div className="group rounded-xl border border-border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div className="group rounded-lg border border-border bg-surface p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted">{label}</span>
         <span

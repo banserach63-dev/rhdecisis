@@ -102,7 +102,7 @@ export function Sidebar({
           ))}
         </nav>
         <div className={`border-t border-sidebar-border px-5 py-3 text-[10px] whitespace-nowrap text-sidebar-muted ${collapsed ? "lg:px-0 lg:text-center" : ""}`}>
-          <span className={collapsed ? "lg:hidden" : ""}>SARH-AD · Usage interne · v1.0</span>
+          <span className={collapsed ? "lg:hidden" : ""}>Des données fiables. Des décisions éclairées. · v1.0</span>
           <span className={`hidden ${collapsed ? "lg:inline" : ""}`}>v1.0</span>
         </div>
       </aside>

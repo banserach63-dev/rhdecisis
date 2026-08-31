@@ -19,25 +19,36 @@ const PILOTAGE: UserRole[] = ["admin", "drh", "direction_generale", "responsable
 
 export const NAV: NavGroup[] = [
   {
-    label: "Pilotage",
+    label: "Tableau de bord",
     items: [
-      { href: "/dashboard", label: "Tableau de bord", icon: "LayoutDashboard", roles: ALL },
-      { href: "/kpi", label: "KPI RH", icon: "Gauge", roles: PILOTAGE },
-      { href: "/alertes", label: "Alertes", icon: "BellRing", roles: RH_DG },
-      { href: "/rapports", label: "Rapports", icon: "FileText", roles: RH_DG },
-      { href: "/assistant-ia", label: "Assistant IA", icon: "Sparkles", roles: PILOTAGE },
+      { href: "/dashboard", label: "Vue RH", icon: "LayoutDashboard", roles: ALL },
     ],
   },
   {
-    label: "Ressources humaines",
+    label: "Pilotage",
     items: [
-      { href: "/agents", label: "Agents", icon: "Users", roles: RH_DG },
       { href: "/effectifs", label: "Effectifs", icon: "BarChart3", roles: RH_DG },
       { href: "/mouvements", label: "Mouvements", icon: "ArrowLeftRight", roles: RH },
       { href: "/carrieres", label: "Carrières", icon: "TrendingUp", roles: RH_DG },
+    ],
+  },
+  {
+    label: "Gestion RH",
+    items: [
+      { href: "/agents", label: "Agents", icon: "Users", roles: RH_DG },
       { href: "/absences", label: "Absences & congés", icon: "CalendarOff", roles: RH_DG },
       { href: "/formations", label: "Formations", icon: "GraduationCap", roles: RH_DG },
       { href: "/performances", label: "Performances", icon: "Target", roles: RH_DG },
+    ],
+  },
+  {
+    label: "Analytique",
+    items: [
+      { href: "/analyse", label: "Analyses", icon: "LineChart", roles: PILOTAGE },
+      { href: "/kpi", label: "Indicateurs", icon: "Gauge", roles: PILOTAGE },
+      { href: "/alertes", label: "Alertes", icon: "BellRing", roles: RH_DG },
+      { href: "/rapports", label: "Rapports", icon: "FileText", roles: RH_DG },
+      { href: "/assistant-ia", label: "Assistant IA", icon: "Sparkles", roles: PILOTAGE },
     ],
   },
   {

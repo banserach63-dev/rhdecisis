@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card, CardHeader, CardBody } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/stat-card";
 import { Select } from "@/components/ui/form";
+import { Disclosure } from "@/components/ui/disclosure";
 import { SimpleBarChart, SimplePieChart } from "@/components/charts/charts";
 import { Users, VenetianMask, Calendar } from "lucide-react";
 import { ageFromDate, formatNumber } from "@/lib/format";
@@ -29,6 +30,7 @@ export default async function EffectifsPage({
 
   if (sp.direction) query = query.eq("direction_id", sp.direction);
   if (sp.service) query = query.eq("service_id", sp.service);
+  if (sp.statut) query = query.eq("statut_id", sp.statut);
   if (sp.sexe) query = query.eq("sexe", sp.sexe);
 
   const { data } = await query;
@@ -48,6 +50,7 @@ export default async function EffectifsPage({
     return Array.from(map.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
   }
 
+  const filtreActif = Boolean(sp.direction || sp.service || sp.sexe || sp.statut);
   const parCategorie = groupBy(agents, (a) => (a as unknown as { categories?: { nom: string } | null }).categories?.nom ?? "");
   const parGrade = groupBy(agents, (a) => (a as unknown as { grades?: { nom: string } | null }).grades?.nom ?? "");
   const parStatut = groupBy(agents, (a) => (a as unknown as { statuts?: { nom: string } | null }).statuts?.nom ?? "");
@@ -95,37 +98,54 @@ export default async function EffectifsPage({
         <StatCard label="Âge moyen" value={`${formatNumber(ageMoyen, 1)} ans`} icon={Calendar} tone="warning" />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader title="Par catégorie professionnelle" />
-          <CardBody>
-            <SimpleBarChart data={parCategorie} xKey="name" series={[{ key: "value", label: "Effectif" }]} />
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader title="Par grade" />
-          <CardBody>
-            <SimpleBarChart data={parGrade} xKey="name" layout="vertical" series={[{ key: "value", label: "Effectif" }]} height={Math.max(220, parGrade.length * 30)} />
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader title="Par statut administratif" />
-          <CardBody>
-            <SimplePieChart data={parStatut} />
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader title="Par direction" />
-          <CardBody>
-            <SimpleBarChart data={parDirection} xKey="name" layout="vertical" series={[{ key: "value", label: "Effectif" }]} height={Math.max(220, parDirection.length * 30)} />
-          </CardBody>
-        </Card>
-        <Card className="lg:col-span-2">
-          <CardHeader title="Par lieu d'affectation" />
-          <CardBody>
-            <SimpleBarChart data={parLieu} xKey="name" series={[{ key: "value", label: "Effectif" }]} />
-          </CardBody>
-        </Card>
+      <p className="mt-6 mb-3 text-sm text-muted">
+        Dépliez une dimension pour analyser la répartition. Affinez d&rsquo;abord par direction ou service ci-dessus pour
+        des vues plus fines.
+      </p>
+
+      <div className="space-y-3">
+        <Disclosure label="Répartition par grade et catégorie" hint={`${parGrade.length} grades`} defaultOpen={filtreActif}>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Card>
+              <CardHeader title="Par catégorie professionnelle" />
+              <CardBody>
+                <SimpleBarChart data={parCategorie} xKey="name" series={[{ key: "value", label: "Effectif" }]} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader title="Par grade" />
+              <CardBody>
+                <SimpleBarChart data={parGrade} xKey="name" layout="vertical" series={[{ key: "value", label: "Effectif" }]} height={Math.max(220, parGrade.length * 30)} />
+              </CardBody>
+            </Card>
+          </div>
+        </Disclosure>
+
+        <Disclosure label="Répartition par statut et direction" defaultOpen={filtreActif}>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Card>
+              <CardHeader title="Par statut administratif" />
+              <CardBody>
+                <SimplePieChart data={parStatut} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader title="Par direction" />
+              <CardBody>
+                <SimpleBarChart data={parDirection} xKey="name" layout="vertical" series={[{ key: "value", label: "Effectif" }]} height={Math.max(220, parDirection.length * 30)} />
+              </CardBody>
+            </Card>
+          </div>
+        </Disclosure>
+
+        <Disclosure label="Répartition par lieu d'affectation" hint={`${parLieu.length} lieux`}>
+          <Card>
+            <CardHeader title="Par lieu d'affectation" />
+            <CardBody>
+              <SimpleBarChart data={parLieu} xKey="name" series={[{ key: "value", label: "Effectif" }]} />
+            </CardBody>
+          </Card>
+        </Disclosure>
       </div>
     </div>
   );

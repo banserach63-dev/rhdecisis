@@ -50,6 +50,32 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
   const categorie = (agent as { categories?: { nom: string } | null }).categories;
   const fonction = (agent as { fonctions?: { nom: string } | null }).fonctions;
 
+  const anciennete = ancienneteAnnees(agent.date_recrutement);
+  const absencesJours = (absencesRes.data ?? [])
+    .filter((a) => a.statut === "validee")
+    .reduce((s, a) => s + (a.nb_jours ?? 0), 0);
+  const formationsSuivies = (formationsRes.data ?? []).length;
+  const derniereEval = (evaluationsRes.data ?? [])[0];
+  const performance =
+    derniereEval?.taux_atteinte != null
+      ? `${formatNumber(derniereEval.taux_atteinte, 0)} %`
+      : derniereEval?.note_globale != null
+        ? `${formatNumber(derniereEval.note_globale, 1)}/20`
+        : "—";
+
+  const situation = [
+    { label: "Ancienneté", value: `${anciennete} an${anciennete > 1 ? "s" : ""}` },
+    { label: "Absences validées", value: `${formatNumber(absencesJours, 1)} j` },
+    { label: "Formations", value: formatNumber(formationsSuivies) },
+    { label: "Performance", value: performance },
+  ];
+
+  const carriereItems = (carriereRes.data ?? []).map((c) => ({
+    date: c.date_evenement,
+    title: c.type_evenement.replace(/_/g, " "),
+    detail: c.description ?? [c.grades?.nom, c.services?.nom].filter(Boolean).join(" · "),
+  }));
+
   return (
     <div>
       <PageHeader
@@ -63,6 +89,15 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
           ) : undefined
         }
       />
+
+      <div className="mb-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {situation.map((s) => (
+          <div key={s.label} className="rounded-lg border border-border bg-surface p-4 shadow-sm">
+            <div className="text-xs font-medium text-muted">{s.label}</div>
+            <div className="mt-1 text-xl font-semibold tracking-tight text-foreground">{s.value}</div>
+          </div>
+        ))}
+      </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-1">
@@ -117,23 +152,19 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
             <AgentTabs
               tabs={[
                 {
-                  key: "historique",
-                  label: "Historique",
+                  key: "carriere",
+                  label: "Carrière",
                   content: (
                     <div className="space-y-4">
                       {canManage && <HistoriqueForm agentId={agent.id} />}
                       <Timeline
                         items={[
-                          ...(carriereRes.data ?? []).map((c) => ({
-                            date: c.date_evenement,
-                            title: c.type_evenement.replace(/_/g, " "),
-                            detail: c.description ?? [c.grades?.nom, c.services?.nom].filter(Boolean).join(" · "),
-                          })),
-                          ...(historiqueRes.data ?? []).map((h) => ({
-                            date: h.date_effet,
-                            title: h.champ,
-                            detail: `${h.ancienne_valeur ?? "—"} → ${h.nouvelle_valeur ?? "—"}${h.motif ? ` (${h.motif})` : ""}`,
-                          })),
+                          {
+                            date: agent.date_recrutement,
+                            title: "Recrutement",
+                            detail: [grade?.nom, service?.nom].filter(Boolean).join(" · "),
+                          },
+                          ...carriereItems,
                         ].sort((a, b) => (a.date < b.date ? 1 : -1))}
                       />
                     </div>
@@ -189,8 +220,8 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
                   ),
                 },
                 {
-                  key: "evaluations",
-                  label: "Évaluations",
+                  key: "performance",
+                  label: "Performance",
                   content: (
                     <SimpleTable
                       empty="Aucune évaluation enregistrée."
@@ -200,6 +231,22 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
                         formatDate(e.date_evaluation),
                         e.note_globale != null ? formatNumber(e.note_globale, 1) : "—",
                         e.taux_atteinte != null ? `${formatNumber(e.taux_atteinte, 1)} %` : "—",
+                      ])}
+                    />
+                  ),
+                },
+                {
+                  key: "historique",
+                  label: "Historique",
+                  content: (
+                    <SimpleTable
+                      empty="Aucune modification enregistrée."
+                      head={["Date", "Champ", "Évolution", "Motif"]}
+                      rows={(historiqueRes.data ?? []).map((h) => [
+                        formatDate(h.date_effet),
+                        h.champ,
+                        `${h.ancienne_valeur ?? "—"} → ${h.nouvelle_valeur ?? "—"}`,
+                        h.motif ?? "—",
                       ])}
                     />
                   ),

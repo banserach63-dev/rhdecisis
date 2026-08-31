@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, BellRing, LogOut, ChevronDown } from "lucide-react";
+import { Menu, BellRing, LogOut, ChevronDown, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ROLE_LABELS } from "@/lib/roles";
 import type { Profile } from "@/lib/database.types";
@@ -18,7 +18,15 @@ export function Topbar({
   onMenu: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
   const router = useRouter();
+
+  function submitSearch(e: React.FormEvent) {
+    e.preventDefault();
+    const term = q.trim();
+    if (!term) return;
+    router.push(`/agents?q=${encodeURIComponent(term)}`);
+  }
 
   async function logout() {
     const supabase = createClient();
@@ -29,10 +37,19 @@ export function Topbar({
 
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-surface/90 px-4 shadow-[0_1px_0_0_rgba(15,30,60,0.03)] backdrop-blur lg:px-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-1 items-center gap-3">
         <button className="text-muted lg:hidden" onClick={onMenu} aria-label="Ouvrir le menu">
           <Menu className="h-5 w-5" />
         </button>
+        <form onSubmit={submitSearch} className="relative hidden w-full max-w-md md:block">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Rechercher un agent, un matricule…"
+            className="w-full rounded-lg border border-border bg-surface-muted py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted focus:border-primary focus:bg-surface focus:outline-none"
+          />
+        </form>
       </div>
       <div className="flex items-center gap-2">
         <Link

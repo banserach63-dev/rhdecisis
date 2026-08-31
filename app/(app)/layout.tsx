@@ -7,10 +7,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const profile = await requireProfile();
   const supabase = await createClient();
 
-  const { count } = await supabase
-    .from("alertes")
-    .select("id", { count: "exact", head: true })
-    .in("statut", ["nouvelle"]);
+  const [{ count }, directionsRes, servicesRes, statutsRes] = await Promise.all([
+    supabase.from("alertes").select("id", { count: "exact", head: true }).in("statut", ["nouvelle"]),
+    supabase.from("directions").select("id, nom").eq("actif", true).order("nom"),
+    supabase.from("services").select("id, nom, direction_id").order("nom"),
+    supabase.from("statuts").select("id, nom").order("nom"),
+  ]);
 
   const showAssistant = ["admin", "drh", "direction_generale", "responsable_rh"].includes(profile.role);
 
@@ -20,6 +22,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       profile={profile}
       alertesNonLues={count ?? 0}
       showAssistant={showAssistant}
+      filterOptions={{
+        directions: directionsRes.data ?? [],
+        services: servicesRes.data ?? [],
+        statuts: statutsRes.data ?? [],
+      }}
     >
       {children}
     </AppShell>
