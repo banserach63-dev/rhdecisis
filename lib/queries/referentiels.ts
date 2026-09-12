@@ -2,14 +2,19 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function loadAgentFormReferentiels() {
   const supabase = await createClient();
-  const [directions, services, grades, categories, statuts, fonctions] = await Promise.all([
-    supabase.from("directions").select("id, nom").eq("actif", true).order("nom"),
-    supabase.from("services").select("id, nom, direction_id").eq("actif", true).order("nom"),
-    supabase.from("grades").select("id, nom").eq("actif", true).order("nom"),
-    supabase.from("categories").select("id, nom").eq("actif", true).order("ordre"),
-    supabase.from("statuts").select("id, nom").eq("actif", true).order("nom"),
-    supabase.from("fonctions").select("id, nom").eq("actif", true).order("nom"),
-  ]);
+  const [directions, services, grades, categories, statuts, fonctions, emplois, regions, provinces, positionsAdministratives] =
+    await Promise.all([
+      supabase.from("directions").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("services").select("id, nom, direction_id").eq("actif", true).order("nom"),
+      supabase.from("grades").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("categories").select("id, nom").eq("actif", true).order("ordre"),
+      supabase.from("statuts").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("fonctions").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("emplois").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("regions").select("id, nom").eq("actif", true).order("nom"),
+      supabase.from("provinces").select("id, nom, region_id").eq("actif", true).order("nom"),
+      supabase.from("positions_administratives").select("id, nom").eq("actif", true).order("nom"),
+    ]);
 
   return {
     directions: directions.data ?? [],
@@ -18,5 +23,9 @@ export async function loadAgentFormReferentiels() {
     categories: categories.data ?? [],
     statuts: statuts.data ?? [],
     fonctions: fonctions.data ?? [],
+    emplois: emplois.data ?? [],
+    regions: regions.data ?? [],
+    provinces: provinces.data ?? [],
+    positionsAdministratives: positionsAdministratives.data ?? [],
   };
 }

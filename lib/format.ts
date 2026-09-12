@@ -30,7 +30,7 @@ export function formatCurrency(value: number | null | undefined): string {
   if (value === null || value === undefined || Number.isNaN(value)) return "—";
   return value.toLocaleString("fr-FR", {
     style: "currency",
-    currency: "MAD",
+    currency: "XOF",
     maximumFractionDigits: 0,
   });
 }

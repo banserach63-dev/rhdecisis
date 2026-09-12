@@ -19,7 +19,7 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
   const { data: agent } = await supabase
     .from("agents")
     .select(
-      "*, grades(nom), directions(nom), services(nom), statuts(nom), categories(nom), fonctions(nom)"
+      "*, grades(nom), directions(nom, natures_structure(nom)), services(nom), statuts(nom), categories(nom), fonctions(nom), emplois(nom), regions(nom), provinces(nom), positions_administratives(nom)"
     )
     .eq("id", id)
     .maybeSingle();
@@ -43,12 +43,17 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
       supabase.from("types_mouvement").select("id, nom").eq("sens", "sortie"),
     ]);
 
-  const direction = (agent as { directions?: { nom: string } | null }).directions;
+  const direction = (agent as { directions?: { nom: string; natures_structure?: { nom: string } | null } | null }).directions;
   const service = (agent as { services?: { nom: string } | null }).services;
   const grade = (agent as { grades?: { nom: string } | null }).grades;
   const statut = (agent as { statuts?: { nom: string } | null }).statuts;
   const categorie = (agent as { categories?: { nom: string } | null }).categories;
   const fonction = (agent as { fonctions?: { nom: string } | null }).fonctions;
+  const emploi = (agent as { emplois?: { nom: string } | null }).emplois;
+  const region = (agent as { regions?: { nom: string } | null }).regions;
+  const province = (agent as { provinces?: { nom: string } | null }).provinces;
+  const positionAdministrative = (agent as { positions_administratives?: { nom: string } | null }).positions_administratives;
+  const natureStructure = direction?.natures_structure?.nom;
 
   const anciennete = ancienneteAnnees(agent.date_recrutement);
   const absencesJours = (absencesRes.data ?? [])
@@ -115,16 +120,22 @@ export default async function AgentFichePage({ params }: { params: Promise<{ id:
               {statut?.nom && <Badge>{statut.nom}</Badge>}
             </div>
             <dl className="mt-5 w-full space-y-2 text-left text-sm">
-              <Row label="Direction" value={direction?.nom ?? "—"} />
-              <Row label="Service" value={service?.nom ?? "—"} />
+              <Row label="Matricule" value={agent.matricule} />
+              <Row label="Emploi" value={emploi?.nom ?? "—"} />
               <Row label="Catégorie" value={categorie?.nom ?? "—"} />
+              <Row label="Direction" value={direction?.nom ?? "—"} />
+              <Row label="Structure" value={service?.nom ?? "—"} />
+              <Row label="Nature de structure" value={natureStructure ?? "—"} />
+              <Row label="Région" value={region?.nom ?? "—"} />
+              <Row label="Province" value={province?.nom ?? "—"} />
+              <Row label="Position administrative" value={positionAdministrative?.nom ?? "—"} />
               <Row label="Sexe" value={agent.sexe === "M" ? "Masculin" : "Féminin"} />
               <Row label="Date de naissance" value={`${formatDate(agent.date_naissance)} (${ageFromDate(agent.date_naissance)} ans)`} />
               <Row label="Recrutement" value={`${formatDate(agent.date_recrutement)} (${ancienneteAnnees(agent.date_recrutement)} ans)`} />
               <Row label="Prise de fonction" value={formatDate(agent.date_prise_fonction)} />
               <Row label="Lieu d'affectation" value={agent.lieu_affectation ?? "—"} />
-              <Row label="E-mail" value={agent.email ?? "—"} />
               <Row label="Téléphone" value={agent.telephone ?? "—"} />
+              <Row label="E-mail" value={agent.email ?? "—"} />
               <Row label="Situation administrative" value={agent.situation_administrative ?? "—"} />
             </dl>
 

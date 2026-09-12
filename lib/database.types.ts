@@ -35,9 +35,54 @@ export interface Direction {
   nom: string;
   description: string | null;
   responsable_agent_id: string | null;
+  nature_structure_id: string | null;
   actif: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface NatureStructure {
+  id: string;
+  code: string;
+  nom: string;
+  description: string | null;
+  actif: boolean;
+  created_at: string;
+}
+
+export interface Emploi {
+  id: string;
+  code: string;
+  nom: string;
+  description: string | null;
+  actif: boolean;
+  created_at: string;
+}
+
+export interface Region {
+  id: string;
+  code: string;
+  nom: string;
+  actif: boolean;
+  created_at: string;
+}
+
+export interface Province {
+  id: string;
+  code: string;
+  nom: string;
+  region_id: string | null;
+  actif: boolean;
+  created_at: string;
+}
+
+export interface PositionAdministrative {
+  id: string;
+  code: string;
+  nom: string;
+  description: string | null;
+  actif: boolean;
+  created_at: string;
 }
 
 export interface Service {
@@ -138,8 +183,12 @@ export interface Agent {
   categorie_id: string | null;
   grade_id: string | null;
   fonction_id: string | null;
+  emploi_id: string | null;
   direction_id: string | null;
   service_id: string | null;
+  region_id: string | null;
+  province_id: string | null;
+  position_administrative_id: string | null;
   lieu_affectation: string | null;
   situation_administrative: string | null;
   email: string | null;

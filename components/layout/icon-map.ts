@@ -23,6 +23,11 @@ import {
   UserCog,
   KeyRound,
   UserRound,
+  Landmark,
+  Briefcase,
+  ClipboardList,
+  Map,
+  MapPin,
   type LucideIcon,
 } from "lucide-react";
 
@@ -51,4 +56,9 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   UserCog,
   KeyRound,
   UserRound,
+  Landmark,
+  Briefcase,
+  ClipboardList,
+  Map,
+  MapPin,
 };
