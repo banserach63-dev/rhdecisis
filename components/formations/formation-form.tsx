@@ -44,7 +44,7 @@ export function FormationForm({ organismes, competences }: { organismes: Opt[]; 
       <Field label="Lieu" htmlFor="lieu">
         <Input id="lieu" name="lieu" />
       </Field>
-      <Field label="Coût (FCFA)" htmlFor="cout">
+      <Field label="Coût (MAD)" htmlFor="cout">
         <Input id="cout" name="cout" type="number" min={0} />
       </Field>
       <Field label="Durée (heures)" htmlFor="duree_heures">

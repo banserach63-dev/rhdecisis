@@ -15,11 +15,6 @@ const ALLOWED_TABLES = [
   "types_mouvement",
   "organismes_formation",
   "competences",
-  "emplois",
-  "natures_structure",
-  "regions",
-  "provinces",
-  "positions_administratives",
 ] as const;
 
 type AllowedTable = (typeof ALLOWED_TABLES)[number];

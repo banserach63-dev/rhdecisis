@@ -55,15 +55,10 @@ export const NAV: NavGroup[] = [
     label: "Référentiels",
     items: [
       { href: "/directions", label: "Directions", icon: "Building2", roles: ["admin", "drh"] },
-      { href: "/services", label: "Services (Structures)", icon: "Building", roles: RH },
-      { href: "/natures-structure", label: "Nature de structure", icon: "Landmark", roles: ["admin", "drh"] },
+      { href: "/services", label: "Services", icon: "Building", roles: RH },
       { href: "/grades", label: "Grades", icon: "Award", roles: ["admin", "drh"] },
-      { href: "/emplois", label: "Emplois", icon: "Briefcase", roles: ["admin", "drh"] },
       { href: "/categories", label: "Catégories", icon: "Layers", roles: ["admin", "drh"] },
       { href: "/statuts", label: "Statuts", icon: "BadgeCheck", roles: ["admin", "drh"] },
-      { href: "/positions-administratives", label: "Positions administratives", icon: "ClipboardList", roles: ["admin", "drh"] },
-      { href: "/regions", label: "Régions", icon: "Map", roles: ["admin", "drh"] },
-      { href: "/provinces", label: "Provinces", icon: "MapPin", roles: ["admin", "drh"] },
     ],
   },
   {

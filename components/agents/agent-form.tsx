@@ -15,10 +15,6 @@ export function AgentForm({
   categories,
   statuts,
   fonctions,
-  emplois,
-  regions,
-  provinces,
-  positionsAdministratives,
   action,
 }: {
   agent?: Agent;
@@ -28,10 +24,6 @@ export function AgentForm({
   categories: RefOption[];
   statuts: RefOption[];
   fonctions: RefOption[];
-  emplois: RefOption[];
-  regions: RefOption[];
-  provinces: (RefOption & { region_id: string | null })[];
-  positionsAdministratives: RefOption[];
   action: (state: { error?: string } | undefined, formData: FormData) => Promise<{ error?: string } | undefined>;
 }) {
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -113,16 +105,6 @@ export function AgentForm({
             ))}
           </Select>
         </Field>
-        <Field label="Emploi" htmlFor="emploi_id">
-          <Select id="emploi_id" name="emploi_id" defaultValue={agent?.emploi_id ?? ""}>
-            <option value="">—</option>
-            {emplois.map((e) => (
-              <option key={e.id} value={e.id}>
-                {e.nom}
-              </option>
-            ))}
-          </Select>
-        </Field>
         <Field label="Direction" htmlFor="direction_id">
           <Select id="direction_id" name="direction_id" defaultValue={agent?.direction_id ?? ""}>
             <option value="">—</option>
@@ -133,42 +115,12 @@ export function AgentForm({
             ))}
           </Select>
         </Field>
-        <Field label="Structure" htmlFor="service_id" hint="Service / structure d'affectation">
+        <Field label="Service" htmlFor="service_id">
           <Select id="service_id" name="service_id" defaultValue={agent?.service_id ?? ""}>
             <option value="">—</option>
             {services.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.nom}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label="Position administrative" htmlFor="position_administrative_id">
-          <Select id="position_administrative_id" name="position_administrative_id" defaultValue={agent?.position_administrative_id ?? ""}>
-            <option value="">—</option>
-            {positionsAdministratives.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nom}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label="Région" htmlFor="region_id">
-          <Select id="region_id" name="region_id" defaultValue={agent?.region_id ?? ""}>
-            <option value="">—</option>
-            {regions.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.nom}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label="Province" htmlFor="province_id">
-          <Select id="province_id" name="province_id" defaultValue={agent?.province_id ?? ""}>
-            <option value="">—</option>
-            {provinces.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nom}
               </option>
             ))}
           </Select>
